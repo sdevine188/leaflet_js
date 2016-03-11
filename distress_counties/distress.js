@@ -1,12 +1,13 @@
 // var states = states_json2()
 // states[0].features[0].properties.density
-var counties = counties_json()
+var counties = counties_json2()
+var criteria = ["Unemployment", "Per capita income"]
 
 
 $(document).ready(function(){
 
 	// var states = states_json2()
-	console.log(counties)
+	console.log(criteria)
 
 	var map = L.map('map').setView([37.8, -96], 4)
 	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -17,21 +18,33 @@ $(document).ready(function(){
 		}).addTo(map)
 	L.geoJson(counties).addTo(map);
 
+	// make dropdown menu to select distress criteria
+	// function buildStateSelect() {
+	// 	// var criteria = ["Unemployment", "Per capita income"]
+	// 	_.each(criteria, function(criteria_string) { 
+	// 		$(".criteria").append($("<option value='" + criteria_string "'>" + criteria_string + "</option>"))
+	// 	})
+	// }
+
+	// buildStateSelect()
+
 	// make choropleth of state overlays
 	function getColor(d) {
-	    	return d > 1000 ? '#800026' :
-	           d > 500  ? '#BD0026' :
-	           d > 200  ? '#E31A1C' :
-	           d > 100  ? '#FC4E2A' :
-	           d > 50   ? '#FD8D3C' :
-	           d > 20   ? '#FEB24C' :
-	           d > 10   ? '#FED976' :
-	                      '#FFEDA0';
+		return d > 0 ? "#ff3300" :
+			"#0000ff";
+	    	// return d > 1000 ? '#800026' :
+	     //       d > 500  ? '#BD0026' :
+	     //       d > 200  ? '#E31A1C' :
+	     //       d > 100  ? '#FC4E2A' :
+	     //       d > 50   ? '#FD8D3C' :
+	     //       d > 20   ? '#FEB24C' :
+	     //       d > 10   ? '#FED976' :
+	     //                  '#FFEDA0';
 	}
 
 	function style(feature) {
 		return {
-			fillColor: getColor(Number(feature.properties.STATEFP)),
+			fillColor: getColor(Number(feature.properties.unemp_distress)),
 			weight: 2,
 			opacity: 1,
 			color: 'white',
@@ -95,9 +108,12 @@ $(document).ready(function(){
 
 	// method that we will use to update the control based on feature properties passed
 	info.update = function (props) {
-	    this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
-	        '<b>' + props.NAME + '</b><br />' + props.STATEFP + ' people / mi<sup>2</sup>'
-	        : 'Hover over a state');
+	    this._div.innerHTML = '<h4>County Economic Indicators</h4>' +  (props ?
+	        '<b>' + props.NAME + '</b><br />' + "County per capita income: " + props.pc_inc + "</b><br />" +
+	        "National per capita income: " + props.pc_inc_nat + "</b><br />" + "Per capita income distressed: " +
+	        props.pc_inc_distress + "</b><br />" + "County unemployment rate: " + props.unemp_rate + "</b><br />" +
+	        "National unemployment rate: " + props.unemp_rate_nat + "</b><br />" + "Unemployment distressed: " + 
+	        props.unemp_distress : 'Hover over a state');
 	};
 
 	info.addTo(map);
