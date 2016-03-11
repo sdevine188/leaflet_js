@@ -124,14 +124,14 @@ $(document).ready(function(){
 	legend.onAdd = function (map) {
 
 	    var div = L.DomUtil.create('div', 'info legend'),
-	        grades = [0, 10, 20, 50, 100, 200, 500, 1000],
-	        labels = [];
+	        grades = [0, 1],
+	        labels = ["Not distressed", "Distressed"];
 
 	    // loop through our density intervals and generate a label with a colored square for each interval
 	    for (var i = 0; i < grades.length; i++) {
 	        div.innerHTML +=
-	            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-	            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+	            '<i style="background:' + getColor(grades[i]) + '"></i> ' +
+	            labels[i] + (grades[i + 1] ? '<br>' : '+');
 	        console.log(div.innerHTML)
 	    }
 
