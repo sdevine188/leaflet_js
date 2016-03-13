@@ -2,12 +2,9 @@
 // states[0].features[0].properties.density
 var counties = counties_json2()
 var criteria = ["Unemployment", "Per capita income"]
-
+var selected_criteria = "Unemployment"
 
 $(document).ready(function(){
-
-	// var states = states_json2()
-	console.log(criteria)
 
 	var map = L.map('map').setView([37.8, -96], 4)
 	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -16,17 +13,23 @@ $(document).ready(function(){
 		// maxZoom: 17,
 		// minZoom: 9
 		}).addTo(map)
-	L.geoJson(counties).addTo(map);
+	// L.geoJson(counties).addTo(map);
 
 	// make dropdown menu to select distress criteria
-	// function buildStateSelect() {
-	// 	// var criteria = ["Unemployment", "Per capita income"]
-	// 	_.each(criteria, function(criteria_string) { 
-	// 		$(".criteria").append($("<option value='" + criteria_string "'>" + criteria_string + "</option>"))
-	// 	})
-	// }
+	function build_criteria_select() {
+		for ( i in criteria){
+			criteria_string = criteria[i];	
+			$(".criteria").append($("<option value='" + criteria_string + "'>" + criteria_string + "</option>"));
+		}
+	}
 
-	// buildStateSelect()
+	build_criteria_select()
+
+	// update map when criteria drop down is changed
+	$('.criteria').on("change", function() {
+  		selected_criteria = ($(this).val())
+  		style_polygons()
+	})
 
 	// make choropleth of state overlays
 	function getColor(d) {
@@ -43,17 +46,104 @@ $(document).ready(function(){
 	}
 
 	function style(feature) {
-		return {
-			fillColor: getColor(Number(feature.properties.unemp_distress)),
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7
-		};
+		if(selected_criteria == "Unemployment"){
+			return {
+				fillColor: getColor(Number(feature.properties.unemp_distress)),
+				weight: 2,
+				opacity: 1,
+				color: 'white',
+				dashArray: '3',
+				fillOpacity: 0.7
+			}
+		}
+		if(selected_criteria == "Per capita income"){
+			return {
+				fillColor: getColor(Number(feature.properties.pc_inc_distress)),
+				weight: 2,
+				opacity: 1,
+				color: 'white',
+				dashArray: '3',
+				fillOpacity: 0.7
+			}
+		}
 	}
 
-	L.geoJson(counties, {style: style}).addTo(map)
+	function style_polygons() {
+		// L.geoJson(counties, {style: style}).addTo(map)
+		
+		// starts out working perfect for fill, highlighting and dehighlighting
+		// this toggles to all green when criteria switched, though still outlined in white bc style function not called
+		// but on mouseover, it highlights red/blue based on currently selected criteria
+		// toggling criteria again though leaves it unchanged, still green, with correct criteria color change
+		// on mouseover
+		// on toggle, the fills reset to green, though the outlines of mousedover counties remains
+		// geojson.setStyle({fillColor: '#66ff33'}) 
+		
+		// starts out perfect for fill, highlight and dehighlight
+		// on toggle, it does not automatically change fills appropriately, but on mouseover it will
+		// interestingly, on mouseover only it will change outline to green if pc_inc criteria selected
+		// passing style to setStyle must not be working, and correct updates only come from mouseover
+		// geojson.setStyle({style: style})
+
+		// starts out perfect, 
+		// on toggle, it changes instantly to green outline, so the if statements for criteria are working
+		// but with the fillcolor option commented out, it naturally doesn't change fill color until mouseover
+		// if(selected_criteria == "Unemployment"){
+		// 	geojson.setStyle({
+		// 		// fillColor: getColor(Number(feature.properties.unemp_distress)),
+		// 		weight: 2,
+		// 		opacity: 1,
+		// 		color: 'white',
+		// 		dashArray: '3',
+		// 		fillOpacity: 0.7
+		// 	})
+		// }
+		// if(selected_criteria == "Per capita income"){
+		// 	geojson.setStyle({
+		// 		// fillColor: getColor(Number(feature.properties.pc_inc_distress)),
+		// 		weight: 2,
+		// 		opacity: 1,
+		// 		color: 'green',
+		// 		dashArray: '3',
+		// 		fillOpacity: 0.7
+		// 	})
+		// }	
+	
+		// another attempt
+		geojson.eachLayer(function (layer) {
+			if(selected_criteria == "Unemployment"){
+				layer.setStyle({
+					fillColor: getColor(Number(layer.feature.properties.unemp_distress)),
+					weight: 2,
+					opacity: 1,
+					color: 'white',
+					dashArray: '3',
+					fillOpacity: 0.7
+				})
+			}
+			if(selected_criteria == "Per capita income"){
+				layer.setStyle({
+					fillColor: getColor(Number(layer.feature.properties.pc_inc_distress)),
+					weight: 2,
+					opacity: 1,
+					color: 'white',
+					dashArray: '3',
+					fillOpacity: 0.7
+				})
+			}
+		})	 
+
+		// this works perfect at first
+		// on toggling, it overlays colors to get purples, etc
+		// does not actually update the style, just adds another overlay
+		// above comments are for code without map.removelayer
+		// with removelayer, it works, but slight delay
+		// map.removeLayer(geojson)
+		// geojson = L.geoJson(counties, {
+		// 	style: style,
+		// 	onEachFeature: onEachFeature
+		// }).addTo(map)
+	}
 
 	// highlight on mouseover
 	var geojson
@@ -96,6 +186,8 @@ $(document).ready(function(){
 		style: style,
 		onEachFeature: onEachFeature
 	}).addTo(map)
+
+	console.log(geojson)
 
 	// create custom control box when hovering over state
 	var info = L.control();
