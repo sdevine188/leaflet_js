@@ -126,7 +126,7 @@ $(document).ready(function(){
 				"County per capita income: ".bold() + numeral(layer.feature.properties.pc_inc).format("$0,0") + "</b><br />" +
 				"National per capita income: ".bold() + numeral(layer.feature.properties.pc_inc_nat).format("$0,0") + "</b><br />" + 
 				"Per capita income distressed?: ".bold() +
-				layer.feature.properties.pc_inc_distress.replace("0", "No").replace("1", "Yes") + "</b><br />" + "County unemployment rate: ".bold() + 
+				layer.feature.properties.pc_inc_distress.replace("0", "No").replace("1", "Yes") + "</b><br /><br />" + "County unemployment rate: ".bold() + 
 				numeral(layer.feature.properties.unemp_rate).format("0.00") + "%" + "</b><br />" +
 				"National unemployment rate: ".bold() + numeral(layer.feature.properties.unemp_rate_nat).format("0.00") + "%" + "</b><br />" + 
 				"Unemployment distressed?: ".bold() + 
@@ -162,15 +162,15 @@ $(document).ready(function(){
 	// method that we will use to update the control based on feature properties passed
 	info.update = function (props) {
 		this._div.innerHTML = '<h4>County Economic Indicators</h4>' +  (props ?
-			'<b>' + props.county_state + '</b><br /><br>' + "County per capita income: ".bold() + 
+			'<b>' + "<h3>" + props.county_state + "</h3>" + "County per capita income: ".bold() + 
 			numeral(props.pc_inc).format("$0,0") + "</b><br />" +
 			"National per capita income: ".bold() + numeral(props.pc_inc_nat).format("$0,0") + "</b><br />" + 
 			"Per capita income distressed?: ".bold() +
-			props.pc_inc_distress.replace("0", "No").replace("1", "Yes") + "</b><br />" + "County unemployment rate: ".bold() + 
+			props.pc_inc_distress.replace("0", "No").replace("1", "Yes") + "</b><br /><br />" + "County unemployment rate: ".bold() + 
 			numeral(props.unemp_rate).format("0.00") + "%" + "</b><br />" +
 			"National unemployment rate: ".bold() + numeral(props.unemp_rate_nat).format("0.00") + "%" + 
 			"</b><br />" + "Unemployment distressed?: ".bold() + 
-			props.unemp_distress.replace("0", "No").replace("1", "Yes") : 'Hover over a state');
+			props.unemp_distress.replace("0", "No").replace("1", "Yes") : 'Hover over a county');
 	};
 
 	info.addTo(map);
@@ -184,12 +184,11 @@ $(document).ready(function(){
 	        grades = [0, 1],
 	        labels = ["Not distressed", "Distressed"];
 
-	    // loop through our density intervals and generate a label with a colored square for each interval
+	    // loop through our legend intervals and generate a label with a colored square for each interval
 	    for (var i = 0; i < grades.length; i++) {
 	        div.innerHTML +=
 	            '<i style="background:' + getColor(grades[i]) + '"></i> ' +
-	            labels[i] + (grades[i + 1] ? '<br>' : '+');
-	        console.log(div.innerHTML)
+	            labels[i] + (grades[i + 1] ? '<br>' : '');
 	    }
 
 	    return div;
