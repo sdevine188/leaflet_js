@@ -49,20 +49,18 @@ $(document).ready(function(){
 		if(selected_criteria == "Unemployment"){
 			return {
 				fillColor: getColor(Number(feature.properties.unemp_distress)),
-				weight: 2,
+				weight: 1,
 				opacity: 1,
 				color: 'white',
-				dashArray: '3',
 				fillOpacity: 0.7
 			}
 		}
 		if(selected_criteria == "Per capita income"){
 			return {
 				fillColor: getColor(Number(feature.properties.pc_inc_distress)),
-				weight: 2,
+				weight: 1,
 				opacity: 1,
 				color: 'white',
-				dashArray: '3',
 				fillOpacity: 0.7
 			}
 		}
@@ -73,20 +71,18 @@ $(document).ready(function(){
 			if(selected_criteria == "Unemployment"){
 				layer.setStyle({
 					fillColor: getColor(Number(layer.feature.properties.unemp_distress)),
-					weight: 2,
+					weight: 1,
 					opacity: 1,
 					color: 'white',
-					dashArray: '3',
 					fillOpacity: 0.7
 				})
 			}
 			if(selected_criteria == "Per capita income"){
 				layer.setStyle({
 					fillColor: getColor(Number(layer.feature.properties.pc_inc_distress)),
-					weight: 2,
+					weight: 1,
 					opacity: 1,
 					color: 'white',
-					dashArray: '3',
 					fillOpacity: 0.7
 				})
 			}
@@ -100,9 +96,8 @@ $(document).ready(function(){
 		var layer = e.target;
 
 		layer.setStyle({
-			weight: 5,
+			weight: 1,
 			color: '#666',
-			dashArray: '',
 			fillOpacity: 0.7
 		});
 
