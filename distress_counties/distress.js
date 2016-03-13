@@ -123,7 +123,7 @@ $(document).ready(function(){
 		geojson.eachLayer(function (layer) {
 			// layer.bindPopup(layer.feature.properties.county_state + "<br>" + "test")
 			layer.bindPopup('<h3>' + layer.feature.properties.county_state + '</h3>' +
-				"County per capita income: ".bold() + numeral(layer.feature.properties.pc_inc).format("$0,0") + "</b><br />" +
+				"County per capita income: ".bold() + numeral(layer.feature.properties.pc_inc).format("$0,0") + "<br />" +
 				"National per capita income: ".bold() + numeral(layer.feature.properties.pc_inc_nat).format("$0,0") + "</b><br />" + 
 				"Per capita income distressed?: ".bold() +
 				layer.feature.properties.pc_inc_distress.replace("0", "No").replace("1", "Yes") + "</b><br /><br />" + "County unemployment rate: ".bold() + 
@@ -162,8 +162,8 @@ $(document).ready(function(){
 	// method that we will use to update the control based on feature properties passed
 	info.update = function (props) {
 		this._div.innerHTML = '<h4>County Economic Indicators</h4>' +  (props ?
-			'<b>' + "<h3>" + props.county_state + "</h3>" + "County per capita income: ".bold() + 
-			numeral(props.pc_inc).format("$0,0") + "</b><br />" +
+			"<h3>" + props.county_state + "</h3>" + "County per capita income: ".bold() + 
+			numeral(props.pc_inc).format("$0,0") + "<br />" +
 			"National per capita income: ".bold() + numeral(props.pc_inc_nat).format("$0,0") + "</b><br />" + 
 			"Per capita income distressed?: ".bold() +
 			props.pc_inc_distress.replace("0", "No").replace("1", "Yes") + "</b><br /><br />" + "County unemployment rate: ".bold() + 
