@@ -1,9 +1,28 @@
 body {
-	background: white
+	background: white;
+	padding: 50px 150px;
+	font-family: 'Open Sans', sans-serif;
+}
+
+.criteria {
+	font-family: 'Open Sans', sans-serif;
+}
+
+.alignright {
+	float: right;
+}
+
+.alignleft {
+	float: left;
+}
+
+.alignimg {
+	padding-right: 50px;
+	float: left;
 }
 
 #map { 
-	height: 500px
+	height: 500px;
 }
 
 .info {
